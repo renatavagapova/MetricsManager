@@ -1,27 +1,29 @@
 ﻿using MetricsAgent.Controllers;
+using MetricsAgent.DAL;
+using MetricsAgent.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
+using System.Collections.Generic;
 using Xunit;
 
 namespace MetricsAgentTests
 {
     public class RamMetricsAgentControllerUnitTests
     {
-        private RamMetricsAgentController _controller;
-
-        public RamMetricsAgentControllerUnitTests()
-        {
-            _controller = new RamMetricsAgentController();
-        }
-
         [Fact]
-        public void GetMetricsFromAgent_ReturnsOk()
+        public void GetMetricsAvailableCheckRequestSelect()
         {
             //Arrange
-            var agentId = 1;
+            var mockLogger = new Mock<ILogger<RamMetricsAgentController>>();
+            var mock = new Mock<IRamMetricsRepository>();
+            mock.Setup(a => a.GetAll()).Returns(new List<RamMetric>()).Verifiable();
+            var controller = new RamMetricsAgentController(mock.Object, mockLogger.Object);
             //Act
-            var result = _controller.GetMetricsFromAgent(agentId);
-            // Assert
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            var result = controller.GetMetricsAvailableRam();
+            //Assert
+            mock.Verify(repository => repository.GetAll(), Times.AtMostOnce());
+            mockLogger.Verify();
         }
     }
 }

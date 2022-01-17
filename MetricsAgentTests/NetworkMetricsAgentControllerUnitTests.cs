@@ -3,29 +3,31 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using Xunit;
 using MetricsAgent;
+using Moq;
+using Microsoft.Extensions.Logging;
+using MetricsAgent.DAL;
+using MetricsAgent.Models;
+using System.Collections.Generic;
 
 namespace MetricsAgentTests
 {
     public class NetworkMetricsAgentControllerUnitTests
     {
-        private NetworkMetricsAgentController _controller;
-
-        public NetworkMetricsAgentControllerUnitTests()
-        {
-            _controller = new NetworkMetricsAgentController();
-        }
-
         [Fact]
-        public void GetMetricsFromAgent_ReturnsOk()
+        public void GetMetricsNetworkCheckRequestSelect()
         {
             //Arrange
-            var agentId = 1;
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+            var mockLogger = new Mock<ILogger<NetworkMetricsAgentController>>();
+            var mock = new Mock<INetworkMetricsRepository>();
+            TimeSpan fromTime = TimeSpan.FromSeconds(5);
+            TimeSpan toTime = TimeSpan.FromSeconds(10);
+            mock.Setup(a => a.GetMetricsFromTimeToTime(fromTime, toTime)).Returns(new List<NetworkMetric>()).Verifiable();
+            var controller = new NetworkMetricsAgentController(mock.Object, mockLogger.Object);
             //Act
-            var result = _controller.GetMetricsFromAgent(agentId, fromTime, toTime);
-            // Assert
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            var result = controller.GetMetricsNetwork(fromTime, toTime);
+            //Assert
+            mock.Verify(repository => repository.GetMetricsFromTimeToTime(fromTime, toTime), Times.AtMostOnce());
+            mockLogger.Verify();
         }
     }
 }

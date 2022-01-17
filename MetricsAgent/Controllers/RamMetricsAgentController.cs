@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MetricsAgent.DAL;
+using MetricsAgent.Responses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +14,39 @@ namespace MetricsAgent.Controllers
     [ApiController]
     public class RamMetricsAgentController : ControllerBase
     {
-        private readonly IRamInfoProvider _ramInfoProvider;
+        private readonly ILogger<RamMetricsAgentController> _logger;
+        private readonly IRamMetricsRepository _repository;
+
+        public RamMetricsAgentController(IRamMetricsRepository repository, ILogger<RamMetricsAgentController> logger)
+        {
+            _repository = repository;
+            _logger = logger;
+        }
 
         [HttpGet("available")]
-        public IActionResult GetMetricsFromAgent([FromRoute] int agentId)
+        public IActionResult GetMetricsAvailableRam()
         {
-            double freeRam = _ramInfoProvider.GetFreeRam();
-            return Ok(freeRam);
+            var metrics = _repository.GetAll();
+            var response = new AllRamMetricsResponse()
+            {
+                Metrics = new List<RamMetricDto>()
+            };
+
+            foreach (var metric in metrics)
+            {
+                response.Metrics.Add(new RamMetricDto
+                {
+                    Available = metric.Available,
+                    Id = metric.Id
+                });
+            }
+
+            if (_logger != null)
+            {
+                _logger.LogInformation("Запрос всех метрик Available RAM");
+            }
+
+            return Ok(response);
         }
     }
 }

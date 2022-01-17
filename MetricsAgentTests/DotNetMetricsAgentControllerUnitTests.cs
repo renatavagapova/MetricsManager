@@ -1,34 +1,31 @@
 ﻿using MetricsAgent.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using System;
+using MetricsAgent.DAL;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MetricsAgent.Models;
+using System;
 using Xunit;
+using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsAgentTests
 {
     public class DotNetMetricsAgentControllerUnitTests
     {
-        private DotNetMetricsAgentController _controller;
-
-        public DotNetMetricsAgentControllerUnitTests()
-        {
-            _controller = new DotNetMetricsAgentController();
-        }
-
         [Fact]
-        public void GetMetricsFromAgent_ReturnsOk()
+        public void GetDotNetMetricsFromTimeToTimeCheckRequestSelect()
         {
             //Arrange
-            var agentId = 1;
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+            var mock = new Mock<IDotNetMetricsRepository>();
+            var mockLogger = new Mock<ILogger<DotNetMetricsAgentController>>();
+            TimeSpan fromTime = TimeSpan.FromSeconds(5);
+            TimeSpan toTime = TimeSpan.FromSeconds(10);
+            mock.Setup(a => a.GetMetricsFromTimeToTime(fromTime, toTime)).Returns(new List<DotNetMetric>()).Verifiable();
+            var controller = new DotNetMetricsAgentController(mock.Object, mockLogger.Object);
             //Act
-            var result = _controller.GetMetricsFromAgent(agentId, fromTime, toTime);
-            // Assert
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            var result = controller.GetMetricsFromTimeToTime(fromTime, toTime);
+            //Assert
+            mock.Verify(repository => repository.GetMetricsFromTimeToTime(fromTime, toTime), Times.AtMostOnce());
+            mockLogger.Verify();
         }
     }
 }
