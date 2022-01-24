@@ -1,4 +1,7 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
+using MetricsAgent.Models;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +19,19 @@ namespace MetricsAgent.Controllers
     {
         private readonly ILogger<RamMetricsAgentController> _logger;
         private readonly IRamMetricsRepository _repository;
+        private readonly IMapper _mapper;
 
-        public RamMetricsAgentController(IRamMetricsRepository repository, ILogger<RamMetricsAgentController> logger)
+        public RamMetricsAgentController(IMapper mapper, IRamMetricsRepository repository, ILogger<RamMetricsAgentController> logger)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet("available")]
         public IActionResult GetMetricsAvailableRam()
         {
-            var metrics = _repository.GetAll();
+            IList<RamMetricModel> metrics = _repository.GetAll();
             var response = new AllRamMetricsResponse()
             {
                 Metrics = new List<RamMetricDto>()
@@ -34,17 +39,10 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new RamMetricDto
-                {
-                    Available = metric.Available,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(_mapper.Map<RamMetricDto>(metric));
             }
 
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос всех метрик Available RAM");
-            }
+            _logger.LogInformation("Запрос всех метрик Available RAM");
 
             return Ok(response);
         }

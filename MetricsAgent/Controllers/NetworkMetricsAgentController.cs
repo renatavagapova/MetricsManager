@@ -1,4 +1,7 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
+using MetricsAgent.Models;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,19 +19,21 @@ namespace MetricsAgent.Controllers
     {
         private readonly ILogger<NetworkMetricsAgentController> _logger;
         private readonly INetworkMetricsRepository _repository;
+        private readonly IMapper _mapper;
 
-        public NetworkMetricsAgentController(INetworkMetricsRepository repository, ILogger<NetworkMetricsAgentController> logger)
+        public NetworkMetricsAgentController(IMapper mapper, INetworkMetricsRepository repository, ILogger<NetworkMetricsAgentController> logger)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet("from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsNetwork(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime)
         {
-            var metrics = _repository.GetMetricsFromTimeToTime(fromTime, toTime);
+            IList<NetworkMetricModel> metrics = _repository.GetMetricsFromTimeToTime(fromTime, toTime);
             var response = new AllNetworkMetricsResponse()
             {
                 Metrics = new List<NetworkMetricDto>()
@@ -36,18 +41,10 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new NetworkMetricDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(_mapper.Map<NetworkMetricDto>(metric));
             }
 
-            if (_logger != null)
-            {
-                _logger.LogInformation($"Запрос метрик Network FromTime = {fromTime} ToTime = {toTime}");
-            }
+            _logger.LogInformation($"Запрос метрик Network FromTime = {fromTime} ToTime = {toTime}");
 
             return Ok(response);
         }

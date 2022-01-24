@@ -2,9 +2,10 @@
 
 namespace MetricsAgent.Models
 {
-    public class RamMetric
+    public class RamMetricModel
     {
         public int Id { get; set; }
         public double Available { get; set; }
+        public DateTimeOffset Time { get; set; }
     }
 }

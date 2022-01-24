@@ -1,4 +1,7 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
+using MetricsAgent.Models;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +19,20 @@ namespace MetricsAgent.Controllers
     {
         private readonly ILogger<HddMetricsAgentController> _logger;
         private readonly IHddMetricsRepository _repository;
+        private readonly IMapper _mapper;
 
-        public HddMetricsAgentController(IHddMetricsRepository repository, ILogger<HddMetricsAgentController> logger)
+        public HddMetricsAgentController(IMapper mapper, IHddMetricsRepository repository, ILogger<HddMetricsAgentController> logger)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet("left")]
         public IActionResult GetMetricsFreeHdd()
         {
-            var metrics = _repository.GetAll();
+            IList<HddMetricModel> metrics = _repository.GetAll();
+
             var response = new AllHddMetricsResponse()
             {
                 Metrics = new List<HddMetricDto>()
@@ -34,14 +40,10 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new HddMetricDto
-                {
-                    FreeSize = metric.FreeSize,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(_mapper.Map<HddMetricDto>(metric));
             }
 
-            _logger.LogInformation($"Запрос всех метрик Hdd");
+            _logger.LogInformation("Запрос всех метрик Hdd");
 
             return Ok(response);
         }

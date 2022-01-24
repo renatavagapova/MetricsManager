@@ -1,23 +1,17 @@
-﻿using MetricsLibrary;
-using MetricsManager.Controllers;
-using MetricsManager.DAL;
-using MetricsManager.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Moq;
-using System;
+﻿using MetricsManager.Controllers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MetricsManager.Models;
+using MetricsLibrary;
+using System;
 using Xunit;
+using Moq;
+using MetricsManager.DAL;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsManagerTests
 {
     public class RamMetricsControllerUnitTests
     {
-        private ILogger<RamMetricsController> _logger;
-
         [Fact]
         public void GetMetricsFromAgentCheckRequestSelect()
         {

@@ -1,5 +1,7 @@
-﻿
+﻿using AutoMapper;
 using MetricsAgent.DAL;
+using MetricsAgent.DAL.Interfaces;
+using MetricsAgent.Models;
 using MetricsAgent.Responses;
 using MetricsLibrary;
 using Microsoft.AspNetCore.Mvc;
@@ -9,25 +11,27 @@ using System.Collections.Generic;
 
 namespace MetricsAgent.Controllers
 {
-    [Route("api/metrics/Cpu")]
+    [Route("api/metrics/cpu")]
     [ApiController]
     public class CpuMetricsAgentController : ControllerBase
     {
         private readonly ILogger<CpuMetricsAgentController> _logger;
         private readonly ICpuMetricsRepository _repository;
+        private readonly IMapper _mapper;
 
-        public CpuMetricsAgentController(ICpuMetricsRepository repository, ILogger<CpuMetricsAgentController> logger)
+        public CpuMetricsAgentController(IMapper mapper, ICpuMetricsRepository repository, ILogger<CpuMetricsAgentController> logger)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        [HttpGet("from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromTimeToTime(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+        [HttpGet("all")]
+        public IActionResult GetAllMetrics(
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime)
         {
-            var metrics = _repository.GetMetricsFromTimeToTime(fromTime, toTime);
+            IList<CpuMetricModel> metrics = _repository.GetAll();
             var response = new AllCpuMetricsResponse()
             {
                 Metrics = new List<CpuMetricDto>()
@@ -35,12 +39,28 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new CpuMetricDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
+            }
+
+            _logger.LogInformation($"Запрос метрик Cpu FromTime = {fromTime} ToTime = {toTime}");
+
+            return Ok(response);
+        }
+
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IActionResult GetMetricsFromTimeToTime(
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime)
+        {
+            IList<CpuMetricModel> metrics = _repository.GetMetricsFromTimeToTime(fromTime, toTime);
+            var response = new AllCpuMetricsResponse()
+            {
+                Metrics = new List<CpuMetricDto>()
+            };
+
+            foreach (var metric in metrics)
+            {
+                response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
             }
 
             _logger.LogInformation($"Запрос метрик Cpu FromTime = {fromTime} ToTime = {toTime}");
@@ -50,8 +70,8 @@ namespace MetricsAgent.Controllers
 
         [HttpGet("from/{fromTime}/to/{toTime}/percentiles/{percentile}")]
         public IActionResult GetMetricsFromTimeToTimePercentile(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime,
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime,
             [FromRoute] Percentile percentile)
         {
             var metrics = _repository.GetMetricsFromTimeToTimeOrderBy(fromTime, toTime, "value");
@@ -67,4 +87,5 @@ namespace MetricsAgent.Controllers
             return Ok(response);
         }
     }
+    
 }
