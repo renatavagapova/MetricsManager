@@ -26,7 +26,7 @@ namespace MetricsAgent.DAL.Repository
                 new
                 {
                     value = item.Value,
-                    time = item.Time
+                    time = item.Time.ToUnixTimeSeconds()
                 });
         }
 

@@ -26,7 +26,7 @@ namespace MetricsAgent.DAL.Repository
                 new
                 {
                     freesize = item.FreeSize,
-                    time = item.Time
+                    time = item.Time.ToUnixTimeSeconds()
                 });
         }
 

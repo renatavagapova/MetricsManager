@@ -25,7 +25,7 @@ namespace MetricsAgent.DAL.Repository
             new
             {
                 value = item.Value,
-                time = item.Time
+                time = item.Time.ToUnixTimeSeconds()
             });
         }
 
@@ -54,9 +54,10 @@ namespace MetricsAgent.DAL.Repository
         public IList<CpuMetricModel> GetAll()
         {
             using var connection = new SQLiteConnection(_connection);
-            return connection
+            var q = connection
                 .Query<CpuMetricModel>($"SELECT id, time, value From cpumetrics")
                 .ToList();
+            return q;
         }
 
         public CpuMetricModel GetById(int target)
