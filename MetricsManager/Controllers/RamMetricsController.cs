@@ -1,13 +1,11 @@
-﻿using MetricsLibrary;
-using MetricsManager.DAL;
+﻿using AutoMapper;
+using MetricsLibrary;
+using MetricsManager.DAL.Interfaces;
 using MetricsManager.Responses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MetricsManager.Controllers
 {
@@ -16,19 +14,21 @@ namespace MetricsManager.Controllers
     public class RamMetricsController : ControllerBase
     {
         private readonly ILogger<RamMetricsController> _logger;
-        private IRamMetricsRepository _repository;
+        private readonly IRamMetricsRepository _repository;
+        private readonly IMapper _mapper;
 
-        public RamMetricsController(IRamMetricsRepository repository, ILogger<RamMetricsController> logger)
+        public RamMetricsController(IMapper mapper, IRamMetricsRepository repository, ILogger<RamMetricsController> logger)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet("agent/{idAgent}/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromAgent(
             [FromRoute] int idAgent,
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime)
         {
             var metrics = _repository.GetMetricsFromTimeToTimeFromAgent(fromTime, toTime, idAgent);
             var response = new AllRamMetricsResponse()
@@ -38,19 +38,10 @@ namespace MetricsManager.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new RamMetricManagerDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id,
-                    IdAgent = metric.IdAgent
-                });
+                response.Metrics.Add(_mapper.Map<RamMetricManagerDto>(metric));
             }
 
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос метрик Ram FromTimeToTime для агента");
-            }
+            _logger.LogInformation($"Запрос метрик Ram FromTime = {fromTime} ToTime = {toTime} для агента Id = {idAgent}");
 
             return Ok(response);
         }
@@ -58,8 +49,8 @@ namespace MetricsManager.Controllers
         [HttpGet("agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}")]
         public IActionResult GetMetricsByPercentileFromAgent(
             [FromRoute] int idAgent,
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime,
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime,
             [FromRoute] Percentile percentile)
         {
             var metrics = _repository.GetMetricsFromTimeToTimeFromAgentOrderBy(fromTime, toTime, "value", idAgent);
@@ -68,31 +59,17 @@ namespace MetricsManager.Controllers
             int percentileThisList = (int)percentile;
             percentileThisList = percentileThisList * metrics.Count / 100;
 
-            var response = new AllRamMetricsResponse()
-            {
-                Metrics = new List<RamMetricManagerDto>()
-            };
+            var response = metrics[percentileThisList].Value;
 
-            response.Metrics.Add(new RamMetricManagerDto
-            {
-                Time = metrics[percentileThisList].Time,
-                Value = metrics[percentileThisList].Value,
-                Id = metrics[percentileThisList].Id,
-                IdAgent = metrics[percentileThisList].IdAgent
-            });
-
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос percentile Ram FromTimeToTime");
-            }
+            _logger.LogInformation($"Запрос percentile Ram FromTime = {fromTime} ToTime = {toTime} percentile = {percentile} для агента Id = {idAgent}");
 
             return Ok(response);
         }
 
         [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAllCluster(
-                    [FromRoute] TimeSpan fromTime,
-                    [FromRoute] TimeSpan toTime)
+        public IActionResult GetMetricsFromCluster(
+                    [FromRoute] DateTimeOffset fromTime,
+                    [FromRoute] DateTimeOffset toTime)
         {
             var metrics = _repository.GetMetricsFromTimeToTime(fromTime, toTime);
             var response = new AllRamMetricsResponse()
@@ -102,27 +79,18 @@ namespace MetricsManager.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new RamMetricManagerDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id,
-                    IdAgent = metric.IdAgent
-                });
+                response.Metrics.Add(_mapper.Map<RamMetricManagerDto>(metric));
             }
 
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос метрик Ram FromTimeToTime для кластера");
-            }
+            _logger.LogInformation($"Запрос метрик Ram FromTime = {fromTime} ToTime = {toTime} для кластера");
 
             return Ok(response);
         }
 
         [HttpGet("cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}")]
         public IActionResult GetMetricsByPercentileFromCluster(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime,
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime,
             [FromRoute] Percentile percentile)
         {
             var metrics = _repository.GetMetricsFromTimeToTimeOrderBy(fromTime, toTime, "value");
@@ -131,23 +99,9 @@ namespace MetricsManager.Controllers
             int percentileThisList = (int)percentile;
             percentileThisList = percentileThisList * metrics.Count / 100;
 
-            var response = new AllRamMetricsResponse()
-            {
-                Metrics = new List<RamMetricManagerDto>()
-            };
+            var response = metrics[percentileThisList].Value;
 
-            response.Metrics.Add(new RamMetricManagerDto
-            {
-                Time = metrics[percentileThisList].Time,
-                Value = metrics[percentileThisList].Value,
-                Id = metrics[percentileThisList].Id,
-                IdAgent = metrics[percentileThisList].IdAgent
-            });
-
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос percentile Ram FromTimeToTime");
-            }
+            _logger.LogInformation($"Запрос percentile = {percentile} Ram FromTime = {fromTime} ToTime = {toTime}");
 
             return Ok(response);
         }

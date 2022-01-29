@@ -1,95 +1,151 @@
 ﻿using MetricsLibrary;
 using MetricsManager.Controllers;
-using MetricsManager.DAL;
-using MetricsManager.Models;
-using Microsoft.AspNetCore.Mvc;
+using MetricsManager.DAL.Interfaces;
+using MetricsManager.DAL.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoFixture;
+using AutoMapper;
+using MetricsManager.Responses;
+using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace MetricsManagerTests
 {
     public class DotNetMetricsControllerUnitTests
     {
-        [Fact]
-        public void GetMetricsFromAgentCheckRequestSelect()
+        private readonly Mock<IDotNetMetricsRepository> _repository;
+        private readonly DotNetMetricsController _controller;
+        private readonly Mock<ILogger<DotNetMetricsController>> _logger;
+        private readonly IMapper _mapper;
+
+        public DotNetMetricsControllerUnitTests()
         {
-            //Arrange
-            var mockLogger = new Mock<ILogger<DotNetMetricsController>>();
-            var mock = new Mock<IDotNetMetricsRepository>();
-            TimeSpan fromTime = TimeSpan.FromSeconds(5);
-            TimeSpan toTime = TimeSpan.FromSeconds(10);
-            int agentId = 1;
-            mock.Setup(a => a.GetMetricsFromTimeToTimeFromAgent(fromTime, toTime, agentId)).Returns(new List<DotNetMetricModel>()).Verifiable();
-            var controller = new DotNetMetricsController(mock.Object, mockLogger.Object);
-            //Act
-            var result = controller.GetMetricsFromAgent(agentId, fromTime, toTime);
-            //Assert
-            mock.Verify(repository => repository.GetMetricsFromTimeToTimeFromAgent(fromTime, toTime, agentId), Times.AtMostOnce());
-            mockLogger.Verify();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<DotNetMetricModel, DotNetMetricManagerDto>());
+            _mapper = config.CreateMapper();
+            _logger = new Mock<ILogger<DotNetMetricsController>>();
+            _repository = new Mock<IDotNetMetricsRepository>();
+            _controller = new DotNetMetricsController(_mapper, _repository.Object, _logger.Object);
         }
 
         [Fact]
-        public void GetMetricsByPercentileFromAgentCheckRequestSelect()
+        public void GetDotNetMetricsFromAgent()
         {
             //Arrange
-            var mockLogger = new Mock<ILogger<DotNetMetricsController>>();
-            var mock = new Mock<IDotNetMetricsRepository>();
-            TimeSpan fromTime = TimeSpan.FromSeconds(5);
-            TimeSpan toTime = TimeSpan.FromSeconds(10);
-            int agentId = 1;
-            Percentile percentile = Percentile.P90;
-            string sort = "value";
-            mock.Setup(a => a.GetMetricsFromTimeToTimeFromAgentOrderBy(fromTime, toTime, sort, agentId))
-                .Returns(new List<DotNetMetricModel>()).Verifiable();
-            var controller = new DotNetMetricsController(mock.Object, mockLogger.Object);
+            var fixture = new Fixture();
+            var returnList = fixture.Create<List<DotNetMetricModel>>();
+
+            _repository.Setup(a => a.GetMetricsFromTimeToTimeFromAgent(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), 1))
+                .Returns(returnList).Verifiable();
             //Act
-            var result = controller.GetMetricsByPercentileFromAgent(agentId, fromTime, toTime, percentile);
+            var result = (OkObjectResult)_controller.GetMetricsFromAgent(1,
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000));
+            var actualResult = (AllDotNetMetricsResponse)result.Value;
             //Assert
-            mock.Verify(repository => repository.GetMetricsFromTimeToTimeFromAgentOrderBy(fromTime, toTime, sort, agentId), Times.AtMostOnce());
-            mockLogger.Verify();
+            _repository.Verify(repository => repository.GetMetricsFromTimeToTimeFromAgent(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                1),
+                Times.Once());
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            for (int i = 0; i < returnList.Count; i++)
+            {
+                Assert.Equal(returnList[i].Id, actualResult.Metrics[i].Id);
+                Assert.Equal(returnList[i].Value, actualResult.Metrics[i].Value);
+                Assert.Equal(returnList[i].IdAgent, actualResult.Metrics[i].IdAgent);
+            }
+            _logger.Verify();
         }
 
         [Fact]
-        public void GetDotNetMetricsFromClusterCheckRequestSelect()
+        public void GetDotNetMetricsFromCluster()
         {
             //Arrange
-            var mockLogger = new Mock<ILogger<DotNetMetricsController>>();
-            var mock = new Mock<IDotNetMetricsRepository>();
-            TimeSpan fromTime = TimeSpan.FromSeconds(5);
-            TimeSpan toTime = TimeSpan.FromSeconds(10);
-            mock.Setup(a => a.GetMetricsFromTimeToTime(fromTime, toTime)).Returns(new List<DotNetMetricModel>()).Verifiable();
-            var controller = new DotNetMetricsController(mock.Object, mockLogger.Object);
+            var fixture = new Fixture();
+            var returnList = fixture.Create<List<DotNetMetricModel>>();
+
+            _repository.Setup(a => a.GetMetricsFromTimeToTime(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()))
+                .Returns(returnList).Verifiable();
             //Act
-            var result = controller.GetMetricsFromAllCluster(fromTime, toTime);
+            var result = (OkObjectResult)_controller.GetMetricsFromCluster(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000));
+            var actualResult = (AllDotNetMetricsResponse)result.Value;
             //Assert
-            mock.Verify(repository => repository.GetMetricsFromTimeToTime(fromTime, toTime), Times.AtMostOnce());
-            mockLogger.Verify();
+            _repository.Verify(repository => repository.GetMetricsFromTimeToTime(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000)),
+                Times.Once());
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            for (int i = 0; i < returnList.Count; i++)
+            {
+                Assert.Equal(returnList[i].Id, actualResult.Metrics[i].Id);
+                Assert.Equal(returnList[i].Value, actualResult.Metrics[i].Value);
+                Assert.Equal(returnList[i].IdAgent, actualResult.Metrics[i].IdAgent);
+            }
+            _logger.Verify();
         }
 
         [Fact]
-        public void GetMetricsByPercentileFromClusterCheckRequestSelect()
+        public void GetDotNetPercentileFromAgent()
         {
             //Arrange
-            var mockLogger = new Mock<ILogger<DotNetMetricsController>>();
-            var mock = new Mock<IDotNetMetricsRepository>();
-            TimeSpan fromTime = TimeSpan.FromSeconds(5);
-            TimeSpan toTime = TimeSpan.FromSeconds(10);
-            Percentile percentile = Percentile.P90;
-            string sort = "value";
-            mock.Setup(a => a.GetMetricsFromTimeToTimeOrderBy(fromTime, toTime, sort))
-                .Returns(new List<DotNetMetricModel>()).Verifiable();
-            var controller = new DotNetMetricsController(mock.Object, mockLogger.Object);
+            var fixture = new Fixture();
+            var returnList = fixture.Create<List<DotNetMetricModel>>();
+
+            _repository.Setup(a => a.GetMetricsFromTimeToTimeFromAgentOrderBy(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), "value", 1))
+                .Returns(returnList).Verifiable();
             //Act
-            var result = controller.GetMetricsByPercentileFromCluster(fromTime, toTime, percentile);
+            var result = (OkObjectResult)_controller.GetMetricsByPercentileFromAgent(1,
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                Percentile.P90);
             //Assert
-            mock.Verify(repository => repository.GetMetricsFromTimeToTimeOrderBy(fromTime, toTime, sort), Times.AtMostOnce());
-            mockLogger.Verify();
+            _repository.Verify(repository => repository.GetMetricsFromTimeToTimeFromAgentOrderBy(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                "value",
+                1),
+                Times.Once());
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            int percentileThisList = (int)Percentile.P90;
+            percentileThisList = percentileThisList * returnList.Count / 100;
+
+            var returnPercentile = returnList[percentileThisList].Value;
+            Assert.Equal(returnPercentile, result.Value);
+            _logger.Verify();
+        }
+
+        [Fact]
+        public void GetDotNetPercentileFromCluster()
+        {
+            //Arrange
+            var fixture = new Fixture();
+            var returnList = fixture.Create<List<DotNetMetricModel>>();
+
+            _repository.Setup(a => a.GetMetricsFromTimeToTimeOrderBy(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), "value"))
+                .Returns(returnList).Verifiable();
+            //Act
+            var result = (OkObjectResult)_controller.GetMetricsByPercentileFromCluster(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                Percentile.P90);
+            //Assert
+            _repository.Verify(repository => repository.GetMetricsFromTimeToTimeOrderBy(
+                    DateTimeOffset.FromUnixTimeSeconds(0),
+                    DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                    "value"),
+                Times.Once());
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            int percentileThisList = (int)Percentile.P90;
+            percentileThisList = percentileThisList * returnList.Count / 100;
+
+            var returnPercentile = returnList[percentileThisList].Value;
+            Assert.Equal(returnPercentile, result.Value);
+            _logger.Verify();
         }
     }
 }

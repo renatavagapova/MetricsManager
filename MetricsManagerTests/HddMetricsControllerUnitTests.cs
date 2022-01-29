@@ -1,97 +1,151 @@
 ﻿using MetricsLibrary;
 using MetricsManager.Controllers;
-using MetricsManager.DAL;
-using MetricsManager.Models;
-using Microsoft.AspNetCore.Mvc;
+using MetricsManager.DAL.Interfaces;
+using MetricsManager.DAL.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoFixture;
+using AutoMapper;
+using MetricsManager.Responses;
+using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace MetricsManagerTests
 {
-    
-        public class HddMetricsControllerUnitTests
+    public class HddMetricsControllerUnitTests
+    {
+        private readonly Mock<IHddMetricsRepository> _repository;
+        private readonly HddMetricsController _controller;
+        private readonly Mock<ILogger<HddMetricsController>> _logger;
+        private readonly IMapper _mapper;
+
+        public HddMetricsControllerUnitTests()
         {
-            [Fact]
-            public void GetMetricsFromAgentCheckRequestSelect()
-            {
-                //Arrange
-                var mockLogger = new Mock<ILogger<HddMetricsController>>();
-                var mock = new Mock<IHddMetricsRepository>();
-                TimeSpan fromTime = TimeSpan.FromSeconds(5);
-                TimeSpan toTime = TimeSpan.FromSeconds(10);
-                int agentId = 1;
-                mock.Setup(a => a.GetMetricsFromTimeToTimeFromAgent(fromTime, toTime, agentId)).Returns(new List<HddMetricModel>()).Verifiable();
-                var controller = new HddMetricsController(mock.Object, mockLogger.Object);
-                //Act
-                var result = controller.GetMetricsFromAgent(agentId, fromTime, toTime);
-                //Assert
-                mock.Verify(repository => repository.GetMetricsFromTimeToTimeFromAgent(fromTime, toTime, agentId), Times.AtMostOnce());
-                mockLogger.Verify();
-            }
-
-            [Fact]
-            public void GetMetricsByPercentileFromAgentCheckRequestSelect()
-            {
-                //Arrange
-                var mockLogger = new Mock<ILogger<HddMetricsController>>();
-                var mock = new Mock<IHddMetricsRepository>();
-                TimeSpan fromTime = TimeSpan.FromSeconds(5);
-                TimeSpan toTime = TimeSpan.FromSeconds(10);
-                int agentId = 1;
-                Percentile percentile = Percentile.P90;
-                string sort = "value";
-                mock.Setup(a => a.GetMetricsFromTimeToTimeFromAgentOrderBy(fromTime, toTime, sort, agentId))
-                    .Returns(new List<HddMetricModel>()).Verifiable();
-                var controller = new HddMetricsController(mock.Object, mockLogger.Object);
-                //Act
-                var result = controller.GetMetricsByPercentileFromAgent(agentId, fromTime, toTime, percentile);
-                //Assert
-                mock.Verify(repository => repository.GetMetricsFromTimeToTimeFromAgentOrderBy(fromTime, toTime, sort, agentId), Times.AtMostOnce());
-                mockLogger.Verify();
-            }
-
-            [Fact]
-            public void GetHddMetricsFromClusterCheckRequestSelect()
-            {
-                //Arrange
-                var mockLogger = new Mock<ILogger<HddMetricsController>>();
-                var mock = new Mock<IHddMetricsRepository>();
-                TimeSpan fromTime = TimeSpan.FromSeconds(5);
-                TimeSpan toTime = TimeSpan.FromSeconds(10);
-                mock.Setup(a => a.GetMetricsFromTimeToTime(fromTime, toTime)).Returns(new List<HddMetricModel>()).Verifiable();
-                var controller = new HddMetricsController(mock.Object, mockLogger.Object);
-                //Act
-                var result = controller.GetMetricsFromAllCluster(fromTime, toTime);
-                //Assert
-                mock.Verify(repository => repository.GetMetricsFromTimeToTime(fromTime, toTime), Times.AtMostOnce());
-                mockLogger.Verify();
-            }
-
-            [Fact]
-            public void GetMetricsByPercentileFromClusterCheckRequestSelect()
-            {
-                //Arrange
-                var mockLogger = new Mock<ILogger<HddMetricsController>>();
-                var mock = new Mock<IHddMetricsRepository>();
-                TimeSpan fromTime = TimeSpan.FromSeconds(5);
-                TimeSpan toTime = TimeSpan.FromSeconds(10);
-                Percentile percentile = Percentile.P90;
-                string sort = "value";
-                mock.Setup(a => a.GetMetricsFromTimeToTimeOrderBy(fromTime, toTime, sort))
-                    .Returns(new List<HddMetricModel>()).Verifiable();
-                var controller = new HddMetricsController(mock.Object, mockLogger.Object);
-                //Act
-                var result = controller.GetMetricsByPercentileFromCluster(fromTime, toTime, percentile);
-                //Assert
-                mock.Verify(repository => repository.GetMetricsFromTimeToTimeOrderBy(fromTime, toTime, sort), Times.AtMostOnce());
-                mockLogger.Verify();
-            }
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<HddMetricModel, HddMetricManagerDto>());
+            _mapper = config.CreateMapper();
+            _logger = new Mock<ILogger<HddMetricsController>>();
+            _repository = new Mock<IHddMetricsRepository>();
+            _controller = new HddMetricsController(_mapper, _repository.Object, _logger.Object);
         }
-    
+
+        [Fact]
+        public void GetHddMetricsFromAgent()
+        {
+            //Arrange
+            var fixture = new Fixture();
+            var returnList = fixture.Create<List<HddMetricModel>>();
+
+            _repository.Setup(a => a.GetMetricsFromTimeToTimeFromAgent(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), 1))
+                .Returns(returnList).Verifiable();
+            //Act
+            var result = (OkObjectResult)_controller.GetMetricsFromAgent(1,
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000));
+            var actualResult = (AllHddMetricsResponse)result.Value;
+            //Assert
+            _repository.Verify(repository => repository.GetMetricsFromTimeToTimeFromAgent(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                1),
+                Times.Once());
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            for (int i = 0; i < returnList.Count; i++)
+            {
+                Assert.Equal(returnList[i].Id, actualResult.Metrics[i].Id);
+                Assert.Equal(returnList[i].Value, actualResult.Metrics[i].Value);
+                Assert.Equal(returnList[i].IdAgent, actualResult.Metrics[i].IdAgent);
+            }
+            _logger.Verify();
+        }
+
+        [Fact]
+        public void GetHddMetricsFromCluster()
+        {
+            //Arrange
+            var fixture = new Fixture();
+            var returnList = fixture.Create<List<HddMetricModel>>();
+
+            _repository.Setup(a => a.GetMetricsFromTimeToTime(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()))
+                .Returns(returnList).Verifiable();
+            //Act
+            var result = (OkObjectResult)_controller.GetMetricsFromCluster(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000));
+            var actualResult = (AllHddMetricsResponse)result.Value;
+            //Assert
+            _repository.Verify(repository => repository.GetMetricsFromTimeToTime(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000)),
+                Times.Once());
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            for (int i = 0; i < returnList.Count; i++)
+            {
+                Assert.Equal(returnList[i].Id, actualResult.Metrics[i].Id);
+                Assert.Equal(returnList[i].Value, actualResult.Metrics[i].Value);
+                Assert.Equal(returnList[i].IdAgent, actualResult.Metrics[i].IdAgent);
+            }
+            _logger.Verify();
+        }
+
+        [Fact]
+        public void GetHddPercentileFromAgent()
+        {
+            //Arrange
+            var fixture = new Fixture();
+            var returnList = fixture.Create<List<HddMetricModel>>();
+
+            _repository.Setup(a => a.GetMetricsFromTimeToTimeFromAgentOrderBy(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), "value", 1))
+                .Returns(returnList).Verifiable();
+            //Act
+            var result = (OkObjectResult)_controller.GetMetricsByPercentileFromAgent(1,
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                Percentile.P90);
+            //Assert
+            _repository.Verify(repository => repository.GetMetricsFromTimeToTimeFromAgentOrderBy(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                "value",
+                1),
+                Times.Once());
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            int percentileThisList = (int)Percentile.P90;
+            percentileThisList = percentileThisList * returnList.Count / 100;
+
+            var returnPercentile = returnList[percentileThisList].Value;
+            Assert.Equal(returnPercentile, result.Value);
+            _logger.Verify();
+        }
+
+        [Fact]
+        public void GetHddPercentileFromCluster()
+        {
+            //Arrange
+            var fixture = new Fixture();
+            var returnList = fixture.Create<List<HddMetricModel>>();
+
+            _repository.Setup(a => a.GetMetricsFromTimeToTimeOrderBy(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>(), "value"))
+                .Returns(returnList).Verifiable();
+            //Act
+            var result = (OkObjectResult)_controller.GetMetricsByPercentileFromCluster(
+                DateTimeOffset.FromUnixTimeSeconds(0),
+                DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                Percentile.P90);
+            //Assert
+            _repository.Verify(repository => repository.GetMetricsFromTimeToTimeOrderBy(
+                    DateTimeOffset.FromUnixTimeSeconds(0),
+                    DateTimeOffset.FromUnixTimeSeconds(17000000000),
+                    "value"),
+                Times.Once());
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            int percentileThisList = (int)Percentile.P90;
+            percentileThisList = percentileThisList * returnList.Count / 100;
+
+            var returnPercentile = returnList[percentileThisList].Value;
+            Assert.Equal(returnPercentile, result.Value);
+            _logger.Verify();
+        }
+    }
 }

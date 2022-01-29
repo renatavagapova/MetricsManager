@@ -12,14 +12,12 @@ namespace MetricsAgent.Jobs
 {
     public class CpuMetricJob : IJob
     {
-        private readonly IServiceProvider _provider;
         private readonly ICpuMetricsRepository _repository;
         private readonly PerformanceCounter _cpuCounter;
 
         public CpuMetricJob(IServiceProvider provider)
         {
-            _provider = provider;
-            _repository = _provider.GetService<ICpuMetricsRepository>();
+            _repository = provider.GetService<ICpuMetricsRepository>();
             _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         }
 

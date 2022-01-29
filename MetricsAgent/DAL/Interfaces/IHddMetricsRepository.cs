@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace MetricsAgent.DAL.Interfaces
 {
-    public interface IHddMetricsRepository : IRepository<HddMetricModel>
-    {
-
-    }
+  
+        public interface IHddMetricsRepository : IRepository<HddMetricModel>
+        {
+            IList<HddMetricModel> GetMetricsFromTimeToTime(DateTimeOffset fromTime, DateTimeOffset toTime);
+        }
+    
 }

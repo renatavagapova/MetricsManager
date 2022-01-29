@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace MetricsAgent.DAL.Interfaces
 {
-    public interface IRamMetricsRepository : IRepository<RamMetricModel>
-    {
-
-    }
+   
+        public interface IRamMetricsRepository : IRepository<RamMetricModel>
+        {
+            IList<RamMetricModel> GetMetricsFromTimeToTime(DateTimeOffset fromTime, DateTimeOffset toTime);
+        }
+    
 }

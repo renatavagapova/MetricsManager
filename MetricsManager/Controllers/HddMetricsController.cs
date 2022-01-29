@@ -1,13 +1,11 @@
-﻿using MetricsLibrary;
-using MetricsManager.DAL;
+﻿using AutoMapper;
+using MetricsLibrary;
+using MetricsManager.DAL.Interfaces;
 using MetricsManager.Responses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MetricsManager.Controllers
 {
@@ -16,19 +14,21 @@ namespace MetricsManager.Controllers
     public class HddMetricsController : ControllerBase
     {
         private readonly ILogger<HddMetricsController> _logger;
-        private IHddMetricsRepository _repository;
+        private readonly IHddMetricsRepository _repository;
+        private readonly IMapper _mapper;
 
-        public HddMetricsController(IHddMetricsRepository repository, ILogger<HddMetricsController> logger)
+        public HddMetricsController(IMapper mapper, IHddMetricsRepository repository, ILogger<HddMetricsController> logger)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet("agent/{idAgent}/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromAgent(
             [FromRoute] int idAgent,
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime)
         {
             var metrics = _repository.GetMetricsFromTimeToTimeFromAgent(fromTime, toTime, idAgent);
             var response = new AllHddMetricsResponse()
@@ -38,19 +38,10 @@ namespace MetricsManager.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new HddMetricManagerDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id,
-                    IdAgent = metric.IdAgent
-                });
+                response.Metrics.Add(_mapper.Map<HddMetricManagerDto>(metric));
             }
 
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос метрик Hdd FromTimeToTime для агента");
-            }
+            _logger.LogInformation($"Запрос метрик Hdd FromTime = {fromTime} ToTime = {toTime} для агента Id = {idAgent}");
 
             return Ok(response);
         }
@@ -58,8 +49,8 @@ namespace MetricsManager.Controllers
         [HttpGet("agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}")]
         public IActionResult GetMetricsByPercentileFromAgent(
             [FromRoute] int idAgent,
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime,
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime,
             [FromRoute] Percentile percentile)
         {
             var metrics = _repository.GetMetricsFromTimeToTimeFromAgentOrderBy(fromTime, toTime, "value", idAgent);
@@ -68,31 +59,17 @@ namespace MetricsManager.Controllers
             int percentileThisList = (int)percentile;
             percentileThisList = percentileThisList * metrics.Count / 100;
 
-            var response = new AllHddMetricsResponse()
-            {
-                Metrics = new List<HddMetricManagerDto>()
-            };
+            var response = metrics[percentileThisList].Value;
 
-            response.Metrics.Add(new HddMetricManagerDto
-            {
-                Time = metrics[percentileThisList].Time,
-                Value = metrics[percentileThisList].Value,
-                Id = metrics[percentileThisList].Id,
-                IdAgent = metrics[percentileThisList].IdAgent
-            });
-
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос percentile Hdd FromTimeToTime");
-            }
+            _logger.LogInformation($"Запрос percentile Hdd FromTime = {fromTime} ToTime = {toTime} percentile = {percentile} для агента Id = {idAgent}");
 
             return Ok(response);
         }
 
         [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAllCluster(
-                    [FromRoute] TimeSpan fromTime,
-                    [FromRoute] TimeSpan toTime)
+        public IActionResult GetMetricsFromCluster(
+                    [FromRoute] DateTimeOffset fromTime,
+                    [FromRoute] DateTimeOffset toTime)
         {
             var metrics = _repository.GetMetricsFromTimeToTime(fromTime, toTime);
             var response = new AllHddMetricsResponse()
@@ -102,27 +79,18 @@ namespace MetricsManager.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new HddMetricManagerDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id,
-                    IdAgent = metric.IdAgent
-                });
+                response.Metrics.Add(_mapper.Map<HddMetricManagerDto>(metric));
             }
 
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос метрик Hdd FromTimeToTime для кластера");
-            }
+            _logger.LogInformation($"Запрос метрик Hdd FromTime = {fromTime} ToTime = {toTime} для кластера");
 
             return Ok(response);
         }
 
         [HttpGet("cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}")]
         public IActionResult GetMetricsByPercentileFromCluster(
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime,
+            [FromRoute] DateTimeOffset fromTime,
+            [FromRoute] DateTimeOffset toTime,
             [FromRoute] Percentile percentile)
         {
             var metrics = _repository.GetMetricsFromTimeToTimeOrderBy(fromTime, toTime, "value");
@@ -131,23 +99,9 @@ namespace MetricsManager.Controllers
             int percentileThisList = (int)percentile;
             percentileThisList = percentileThisList * metrics.Count / 100;
 
-            var response = new AllHddMetricsResponse()
-            {
-                Metrics = new List<HddMetricManagerDto>()
-            };
+            var response = metrics[percentileThisList].Value;
 
-            response.Metrics.Add(new HddMetricManagerDto
-            {
-                Time = metrics[percentileThisList].Time,
-                Value = metrics[percentileThisList].Value,
-                Id = metrics[percentileThisList].Id,
-                IdAgent = metrics[percentileThisList].IdAgent
-            });
-
-            if (_logger != null)
-            {
-                _logger.LogInformation("Запрос percentile Hdd FromTimeToTime");
-            }
+            _logger.LogInformation($"Запрос percentile = {percentile} Hdd FromTime = {fromTime} ToTime = {toTime}");
 
             return Ok(response);
         }

@@ -1,15 +1,9 @@
-﻿using MetricsManager;
-using MetricsManager.Controllers;
-using MetricsManager.DAL;
-using MetricsManager.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using MetricsManager.Controllers;
+using MetricsManager.DAL.Interfaces;
+using MetricsManager.DAL.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace MetricsManagerTests

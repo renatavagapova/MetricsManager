@@ -30,6 +30,7 @@ namespace MetricsManager
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:5050");
                 })
                 .ConfigureLogging(logging =>
                 {
