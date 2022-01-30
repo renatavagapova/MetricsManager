@@ -25,18 +25,19 @@ namespace MetricsManager
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services, IApplicationBuilder app)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             ConfigureSqlLiteConnection(services);
+            
             services.AddScoped<IAgentsRepository, AgentsRepository>();
             services.AddScoped<ICpuMetricsRepository, CpuMetricsRepository>();
             services.AddScoped<IDotNetMetricsRepository, DotNetMetricsRepository>();
             services.AddScoped<IHddMetricsRepository, HddMetricsRepository>();
             services.AddScoped<INetworkMetricsRepository, NetworkMetricsRepository>();
             services.AddScoped<IRamMetricsRepository, RamMetricsRepository>();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MetricsManager v1"));
+
+            services.AddSwaggerGen();
         }
 
         private void ConfigureSqlLiteConnection(IServiceCollection services)
