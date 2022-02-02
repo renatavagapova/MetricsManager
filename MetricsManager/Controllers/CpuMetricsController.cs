@@ -24,6 +24,18 @@ namespace MetricsManager.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Получение всех метрик CPU
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/metrics/cpu/all
+        ///
+        /// </remarks>
+        /// <returns>Список метрик, которые были сохранены в репозитории</returns>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpGet("all")]
         public IActionResult GetAll()
         {
@@ -40,6 +52,21 @@ namespace MetricsManager.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Получение всех метрик CPU в заданном диапазоне времени для указанного агента
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/metrics/cpu/agent/{idAgent}/from/{fromTime}/to/{toTime}
+        ///
+        /// </remarks>
+        /// <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+        /// <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+        /// <param name="agent">Id агента</param>
+        /// <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpGet("agent/{idAgent}/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromAgent(
             [FromRoute] int idAgent,
@@ -62,6 +89,21 @@ namespace MetricsManager.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Получение перцинтиля CPU в заданном диапазоне времени для указанного агента
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/metrics/cpu/agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+        ///
+        /// </remarks>
+        /// <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+        /// <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+        /// <param name="agent">Id агента</param>
+        /// <returns>Указанный  перцинтиль</returns>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpGet("agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}")]
         public IActionResult GetMetricsByPercentileFromAgent(
             [FromRoute] int idAgent,
@@ -82,6 +124,21 @@ namespace MetricsManager.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Получение всех метрик CPU в заданном диапазоне времени для кластера
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/metrics/cpu/cluster/from/{fromTime}/to/{toTime}
+        ///
+        /// </remarks>
+        /// <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+        /// <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+        /// <param name="agent">Id агента</param>
+        /// <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromCluster(
                     [FromRoute] DateTimeOffset fromTime,
@@ -103,6 +160,20 @@ namespace MetricsManager.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Получение перцинтиля CPU в заданном диапазоне времени для всего кластера
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/metrics/cpu/cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+        /// 
+        /// </remarks>
+        /// <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+        /// <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+        /// <returns>Указанный  перцинтиль</returns>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpGet("cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}")]
         public IActionResult GetMetricsByPercentileFromCluster(
             [FromRoute] DateTimeOffset fromTime,

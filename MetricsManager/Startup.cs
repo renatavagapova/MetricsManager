@@ -16,6 +16,8 @@ using Quartz.Spi;
 using System;
 using MetricsManager.DAL;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
 
 namespace MetricsManager
 {
@@ -80,27 +82,30 @@ namespace MetricsManager
                 cronExpression: "20/30 * * * * ?"));
             services.AddHostedService<QuartzHostedService>();
 
-            services.AddSwaggerGen();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "API ñåðâèñà àãåíòà ñáîðà ìåòðèê",
-                    Description = "Òóò ìîæíî ïîèãðàòü ñ api íàøåãî ñåðâèñà",
-                    TermsOfService = new Uri("https://example.com/terms"),
+                    Description = "Ñòðàíèöà äëÿ òåñòèðîâàíèÿ ðàáîòû API",
+                    TermsOfService = new Uri("https://coderda.com"),
                     Contact = new OpenApiContact
                     {
                         Name = "Kiverin",
-                        Email = "kiverinda@yandex.ru",
-                        Url = new Uri("https://kremlin.ru"),
+                        Email = string.Empty,
+                        Url = new Uri("https://coderda.com"),
                     },
                     License = new OpenApiLicense
                     {
-                        Name = "ìîæíî óêàçàòü ïîä êàêîé ëèöåíçèåé âñå îïóáëèêîâàíî",
-                        Url = new Uri("https://example.com/license"),
+                        Name = "Free license",
+                        Url = new Uri("https://coderda.com"),
                     }
                 });
+                var xmlFile =
+                    $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
         }

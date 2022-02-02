@@ -23,6 +23,17 @@ namespace MetricsManager.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Регистрация нового агента сбора метрик
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/agents/register
+        ///
+        /// </remarks>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpPost("register")]
         public IActionResult RegisterAgent([FromBody] AgentModel agentInfo)
         {
@@ -37,6 +48,17 @@ namespace MetricsManager.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Включение агента сбора метрик
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/agents/enable/{Idagent}
+        ///
+        /// </remarks>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpPut("enable/{Idagent}")]
         public IActionResult EnableAgentById([FromRoute] int Idagent)
         {
@@ -49,6 +71,17 @@ namespace MetricsManager.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Выключение агента сбора метрик
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/agents/disable/{Idagent}
+        ///
+        /// </remarks>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpPut("disable/{Idagent}")]
         public IActionResult DisableAgentById([FromRoute] int Idagent)
         {
@@ -61,6 +94,17 @@ namespace MetricsManager.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Получение всех зарегистрированных агентов
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/agents/all
+        ///
+        /// </remarks>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpGet("all")]
         public IActionResult GetAllAgents()
         {

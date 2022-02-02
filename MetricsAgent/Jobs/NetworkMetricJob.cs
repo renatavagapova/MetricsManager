@@ -10,6 +10,7 @@ using MetricsAgent.Models;
 
 namespace MetricsAgent.Jobs
 {
+    [DisallowConcurrentExecution]
     public class NetworkMetricJob : IJob
     {
         private readonly IServiceProvider _provider;

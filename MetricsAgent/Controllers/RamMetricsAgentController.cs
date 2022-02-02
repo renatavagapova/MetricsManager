@@ -28,7 +28,18 @@ namespace MetricsAgent.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("available")]
+        /// <summary>
+        /// Получение всех метрик Ram
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/metrics/ram/all
+        ///
+        /// </remarks>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
+        [HttpGet("all")]
         public IActionResult GetMetricsAvailableRam()
         {
             IList<RamMetricModel> metrics = _repository.GetAll();
@@ -47,6 +58,20 @@ namespace MetricsAgent.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Получение всех метрик Ram в заданном диапазоне времени
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/metrics/ram/from/{fromTime}/to/{toTime}
+        ///
+        /// </remarks>
+        /// <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+        /// <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+        /// <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpGet("from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromTimeToTime(
             [FromRoute] DateTimeOffset fromTime,

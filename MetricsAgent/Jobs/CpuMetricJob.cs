@@ -3,13 +3,13 @@ using MetricsAgent.Models;
 using Quartz;
 using MetricsAgent.DAL;
 using Microsoft.Extensions.DependencyInjection;
-
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MetricsAgent.Jobs
 {
+    [DisallowConcurrentExecution]
     public class CpuMetricJob : IJob
     {
         private readonly ICpuMetricsRepository _repository;

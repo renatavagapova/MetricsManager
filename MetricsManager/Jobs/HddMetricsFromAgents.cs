@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace MetricsManager.Jobs
 {
+    [DisallowConcurrentExecution]
     public class HddMetricsFromAgents : IJob
     {
         private readonly IHddMetricsRepository _repositoryHdd;

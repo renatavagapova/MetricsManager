@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace MetricsManager.Jobs
 {
+    [DisallowConcurrentExecution]
     public class DotNetMetricsFromAgents : IJob
     {
         private readonly IDotNetMetricsRepository _repositoryDotNet;

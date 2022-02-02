@@ -29,6 +29,20 @@ namespace MetricsAgent.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Получение всех метрик DotNet в заданном диапазоне времени
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        /// GET api/metrics/dotnet/from/{fromTime}/to/{toTime}
+        ///
+        /// </remarks>
+        /// <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+        /// <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+        /// <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+        /// <response code="200">Удачное выполнение запроса</response>
+        /// <response code="400">Ошибка в запросе</response>
         [HttpGet("from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromTimeToTime(
             [FromRoute] DateTimeOffset fromTime,

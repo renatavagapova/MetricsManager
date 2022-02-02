@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace MetricsManager.Jobs
 {
+    [DisallowConcurrentExecution]
     public class RamMetricsFromAgents : IJob
     {
         private readonly IRamMetricsRepository _repositoryRam;

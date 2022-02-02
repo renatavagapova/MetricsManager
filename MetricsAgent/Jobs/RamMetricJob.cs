@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MetricsAgent.Jobs
 {
+    [DisallowConcurrentExecution]
     public class RamMetricJob : IJob
     {
         private readonly IServiceProvider _provider;

@@ -1,0 +1,592 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MetricsManager</name>
+    </assembly>
+    <members>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuAllAsync">
+            <summary>Получение всех метрик CPU</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuAll">
+            <summary>Получение всех метрик CPU</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuAllAsync(System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение всех метрик CPU</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuFromToAsync(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик CPU в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuFromTo(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик CPU в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuFromToAsync(System.DateTimeOffset,System.DateTimeOffset,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение всех метрик CPU в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuFromToPercentilesAsync(System.DateTimeOffset,System.DateTimeOffset,MetricsManager.Controllers.PercentileFromNSwag)">
+            <summary>Получение заданного перцентиля для метрик CPU в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <param name="percentile">требуемый перцентиль из Enum Percentile</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuFromToPercentiles(System.DateTimeOffset,System.DateTimeOffset,MetricsManager.Controllers.PercentileFromNSwag)">
+            <summary>Получение заданного перцентиля для метрик CPU в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <param name="percentile">требуемый перцентиль из Enum Percentile</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsCpuFromToPercentilesAsync(System.DateTimeOffset,System.DateTimeOffset,MetricsManager.Controllers.PercentileFromNSwag,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение заданного перцентиля для метрик CPU в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <param name="percentile">требуемый перцентиль из Enum Percentile</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsDotnetFromToAsync(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик DotNet в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsDotnetFromTo(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик DotNet в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsDotnetFromToAsync(System.DateTimeOffset,System.DateTimeOffset,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение всех метрик DotNet в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsHddAllAsync">
+            <summary>Получение всех метрик Hdd</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsHddAll">
+            <summary>Получение всех метрик Hdd</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsHddAllAsync(System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение всех метрик Hdd</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsHddFromToAsync(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик Hdd в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsHddFromTo(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик Hdd в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsHddFromToAsync(System.DateTimeOffset,System.DateTimeOffset,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение всех метрик Hdd в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsNetworkFromToAsync(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик Network в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsNetworkFromTo(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик Network в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsNetworkFromToAsync(System.DateTimeOffset,System.DateTimeOffset,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение всех метрик Network в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsRamAllAsync">
+            <summary>Получение всех метрик Ram</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsRamAll">
+            <summary>Получение всех метрик Ram</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsRamAllAsync(System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение всех метрик Ram</summary>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsRamFromToAsync(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик Ram в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsRamFromTo(System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>Получение всех метрик Ram в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.Client.ApiMetricsRamFromToAsync(System.DateTimeOffset,System.DateTimeOffset,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Получение всех метрик Ram в заданном диапазоне времени</summary>
+            <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+            <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+            <returns>Удачное выполнение запроса</returns>
+            <exception cref="T:MetricsManager.Controllers.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:MetricsManager.Controllers.AgentsController.RegisterAgent(MetricsManager.DAL.Models.AgentModel)">
+             <summary>
+             Регистрация нового агента сбора метрик
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/agents/register
+            
+             </remarks>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.AgentsController.EnableAgentById(System.Int32)">
+             <summary>
+             Включение агента сбора метрик
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/agents/enable/{Idagent}
+            
+             </remarks>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.AgentsController.DisableAgentById(System.Int32)">
+             <summary>
+             Выключение агента сбора метрик
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/agents/disable/{Idagent}
+            
+             </remarks>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.AgentsController.GetAllAgents">
+             <summary>
+             Получение всех зарегистрированных агентов
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/agents/all
+            
+             </remarks>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.CpuMetricsController.GetAll">
+             <summary>
+             Получение всех метрик CPU
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/cpu/all
+            
+             </remarks>
+             <returns>Список метрик, которые были сохранены в репозитории</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.CpuMetricsController.GetMetricsFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик CPU в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/cpu/agent/{idAgent}/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.CpuMetricsController.GetMetricsByPercentileFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля CPU в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/cpu/agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.CpuMetricsController.GetMetricsFromCluster(System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик CPU в заданном диапазоне времени для кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/cpu/cluster/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.CpuMetricsController.GetMetricsByPercentileFromCluster(System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля CPU в заданном диапазоне времени для всего кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/cpu/cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+             
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.DotNetMetricsController.GetMetricsFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик DotNet в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/dotnet/agent/{idAgent}/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.DotNetMetricsController.GetMetricsByPercentileFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля DotNet в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/dotnet/agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.DotNetMetricsController.GetMetricsFromCluster(System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик DotNet в заданном диапазоне времени для кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/dotnet/cluster/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.DotNetMetricsController.GetMetricsByPercentileFromCluster(System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля DotNet в заданном диапазоне времени для всего кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/dotnet/cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+             
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.HddMetricsController.GetMetricsFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик Hdd в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/hdd/agent/{idAgent}/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.HddMetricsController.GetMetricsByPercentileFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля Hdd в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/hdd/agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.HddMetricsController.GetMetricsFromCluster(System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик Hdd в заданном диапазоне времени для кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/hdd/cluster/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.HddMetricsController.GetMetricsByPercentileFromCluster(System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля Hdd в заданном диапазоне времени для всего кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/hdd/cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+             
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.NetworkMetricsController.GetMetricsFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик Network в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/network/agent/{idAgent}/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.NetworkMetricsController.GetMetricsByPercentileFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля Network в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/network/agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.NetworkMetricsController.GetMetricsFromCluster(System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик Network в заданном диапазоне времени для кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/network/cluster/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.NetworkMetricsController.GetMetricsByPercentileFromCluster(System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля Network в заданном диапазоне времени для всего кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/network/cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+             
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.RamMetricsController.GetMetricsFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик Ram в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/ram/agent/{idAgent}/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.RamMetricsController.GetMetricsByPercentileFromAgent(System.Int32,System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля Ram в заданном диапазоне времени для указанного агента
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/ram/agent/{idAgent}/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.RamMetricsController.GetMetricsFromCluster(System.DateTimeOffset,System.DateTimeOffset)">
+             <summary>
+             Получение всех метрик Ram в заданном диапазоне времени для кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/ram/cluster/from/{fromTime}/to/{toTime}
+            
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <param name="agent">Id агента</param>
+             <returns>Список метрик, которые были сохранены в репозитории и соответствуют заданному диапазону времени</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+        <member name="M:MetricsManager.Controllers.RamMetricsController.GetMetricsByPercentileFromCluster(System.DateTimeOffset,System.DateTimeOffset,MetricsLibrary.Percentile)">
+             <summary>
+             Получение перцинтиля Ram в заданном диапазоне времени для всего кластера
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+             GET api/metrics/ram/cluster/from/{fromTime}/to/{toTime}/percentiles/{percentile}
+             
+             </remarks>
+             <param name="fromTime">начальная метка времени в формате DateTimeOffset</param>
+             <param name="toTime">конечная метка времени в формате DateTimeOffset</param>
+             <returns>Указанный  перцинтиль</returns>
+             <response code="200">Удачное выполнение запроса</response>
+             <response code="400">Ошибка в запросе</response>
+        </member>
+    </members>
+</doc>
